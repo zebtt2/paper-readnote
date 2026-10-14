@@ -342,7 +342,8 @@ def print_pdf(html_path, pdf_path):
             "--disable-extensions", f"--print-to-pdf={pdf_path}", "--print-to-pdf-no-header", url]
     for flag in ("--headless=new", "--headless"):
         cmd = [flag if a == "--headless=new" else a for a in base]
-        subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+        subprocess.run(cmd, capture_output=True, text=True, timeout=300,
+                           encoding="utf-8", errors="replace")
         if pdf_path.exists():
             return browser
     sys.exit("FAIL: browser did not produce a PDF.")
