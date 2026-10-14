@@ -1,0 +1,4 @@
+interface:
+  display_name: "Paper Read-Note"
+  short_description: "Turn a paper PDF into a 4-part Chinese read-note PDF"
+  default_prompt: "Use $paper-readnote to turn this paper PDF into a 4-part Chinese read-note PDF."
