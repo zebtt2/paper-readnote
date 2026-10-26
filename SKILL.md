@@ -2,7 +2,7 @@
 name: paper-readnote
 description: 把一篇论文 PDF 变成一份中文阅读笔记 PDF，固定四部分——①摘要+框架模型+研究思路/研究方法，②图表（关键结论卡片、指标表、核心公式图+符号表+说明）与整篇框架思维导图，③看懂这篇论文才能答出的十个问题，④十个问题的答案。Use when the user hands over a paper PDF (or paper text/link) and asks for 阅读笔记 / 读书笔记 / readnote / 精读总结 / 总结成 PDF / 论文总结，or wants the framework, key formulas, conclusions, mind map and self-test questions as a deliverable PDF. Not for bilingual full-text translation readers (use nature-reader), not for literature search, not for plain single-paragraph summaries.
 metadata:
-  version: "1.1.1"
+  version: "1.2.0"
 ---
 
 # Paper Read-Note PDF
@@ -56,7 +56,7 @@ The script renders formulas to images with matplotlib mathtext, builds the mind 
   },
   "part2": {
     "conclusions": [{"title": "结论短标题", "claim": "一句话结论", "detail": "这条结论怎么来的、意味着什么", "evidence": "Tab.2 / p.5 / Sec 4.3", "why": "为什么会得到这个结果", "analogy": "用一个场景说明它意味着什么（可选）"}],
-    "formulas": [{"name": "损失函数/评分/更新式", "latex": "\\mathcal{L}=-\\sum_i y_i\\log p_i", "symbols": [{"sym": "N", "mean": "样本数"}], "intuition": "直观含义", "role": "在框架中的作用与它决定的东西", "analogy": "这个式子像什么（可选）"}],
+    "formulas": [{"name": "损失函数/评分/更新式", "latex": "\\mathcal{L}=-\\sum_i y_i\\log p_i", "symbols": [{"sym": "N", "mean": "样本数"}], "intuition": "直观含义", "role": "在框架中的作用与它决定的东西", "derivation": ["推导步骤（可选，逐条）"], "analogy": "这个式子像什么（可选）"}],
     "metrics": [{"name": "指标/数据集", "value": "数值", "note": "对比对象或条件"}],
     "mindmap": {"text": "论文一句话核心", "children": [{"text": "第一层模块", "note": "可选短注", "children": [{"text": "子步骤"}]}]}
   },
@@ -66,7 +66,7 @@ The script renders formulas to images with matplotlib mathtext, builds the mind 
 }
 ```
 
-Every field accepts a string instead of a list when there is only one item. Omitted optional fields (`modules`, `metrics`, `glossary`, `why`, `tests`, `note`, `analogy`, `framework_analogy`) are simply not rendered — omit rather than pad.
+Every field accepts a string instead of a list when there is only one item. Omitted optional fields (`modules`, `metrics`, `glossary`, `why`, `tests`, `note`, `analogy`, `framework_analogy`, `derivation`) are simply not rendered — omit rather than pad.
 
 ## Content rules
 
@@ -75,6 +75,8 @@ Every field accepts a string instead of a list when there is only one item. Omit
 **Part 1.** Abstract is a rewrite, not a translation of the first paragraph. `research_approach` is the part readers cannot get from the abstract: the chain of reasoning from problem to method, including what earlier approaches failed at. `methods` covers data, model, training objective and evaluation protocol in enough detail to reproduce the setup.
 
 **Part 2.** Conclusions are the load-bearing ones (5-8), each with the mechanism behind it, not a restatement of the abstract. Formulas are the ones the paper actually turns on (3-6), typeset in mathtext-compatible LaTeX, with a symbol table for every symbol used and an explanation of what the formula decides — each formula is rendered to an image, so keep it on one line. The mind map is the framework flow: root = the paper's one-sentence idea, then branches for data/architecture/objective/training/evaluation, ending in leaf nodes that are concrete mechanisms rather than section names.
+
+**公式推导（`derivation`）。** 公式若有有意义的推导，就填 `derivation`：逐条步骤，从定义出发，每一步只说做了什么，不重复结论。论文没写全的步骤要标「本笔记补」，不要伪装成原文。
 
 **类比（`analogy` / `framework_analogy`）。** 类比只写在第 1.2/1.3 节、2.1 节和 2.3 节这三处，渲染成淡蓝圆角框——框内文字一律是笔记作者补的类比、不是论文内容，读者靠底色区分来源，所以不逐框加标注。写类比要守两条：写完必须落回机制（一句话说清它在论文里对应哪个组件、哪个量或哪一步），并且必须指出这个类比在哪里失效。只给顺耳的比喻，等于递给读者一个可以复述但不理解的句子。第三、四部分禁止使用类比，那里检验的正是能不能讲出机制。
 

@@ -63,6 +63,11 @@ td.sym { font-family: Consolas, monospace; white-space: nowrap; width: 1%; }
 .meta-line { color: #6b7a8c; font-size: 9pt; }
 .why { color: #4a5a6c; }
 .src { color: #6b7a8c; font-size: 8.5pt; margin-top: 4px; }
+.deriv { background: #f7f8fa; border-left: 3px solid #a7b6c9; border-radius: 4px;
+         padding: 6px 10px 6px 12px; margin: 7px 0 3px; font-size: 9.5pt; color: #4a5666; }
+.deriv .dh { font-weight: 600; color: #6b7a8c; font-size: 9pt; letter-spacing: .3px; }
+.deriv ol { margin: 2px 0 0 16px; padding: 0; }
+.deriv li { margin: 1px 0; }
 .anlg { background: rgba(120, 170, 225, 0.15); border: 1px solid rgba(120, 170, 225, 0.45);
         border-radius: 8px; padding: 6px 10px; margin: 7px 0 3px; color: #626c78;
         font-style: italic; font-size: 9.5pt; line-height: 1.55; }
@@ -103,6 +108,14 @@ def esc(v):
 def analogy_box(text):
     t = str(text or "").strip()
     return f"<div class='anlg'>{esc(t)}</div>" if t else ""
+
+
+def derivation_box(steps):
+    steps = [s for s in items(steps) if str(s).strip()]
+    if not steps:
+        return ""
+    lis = "".join(f"<li>{esc(s)}</li>" for s in steps)
+    return f"<div class='deriv'><div class='dh'>推导</div><ol>{lis}</ol></div>"
 
 
 def items(v):
@@ -293,6 +306,7 @@ def build_html(spec, tmpdir, warn):
                 bits.append(f"<p>{esc(f['intuition'])}</p>")
             if f.get("role"):
                 bits.append(f"<p class='why'>在框架中的作用：{esc(f['role'])}</p>")
+            bits.append(derivation_box(f.get("derivation")))
             bits.append(analogy_box(f.get("analogy")))
             out.append("<div class='fbox'>" + "".join(bits) + "</div>")
     if p2.get("mindmap"):
